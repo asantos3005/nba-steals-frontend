@@ -9,6 +9,8 @@ WIP
 ## Overview
 The project was learning project to learn the fundamentals of Entity Framework Core in a fun way. I'm a big fan of the NBA so I thought using EF Core to handle data models of NBA stats would be a engaging way to learn.
 
+Backend Repository: https://github.com/asantos3005/nba-steals-api
+
 ## Features
 - Display TanStack table of NBA Player steal data
 - Pagination
