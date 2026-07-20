@@ -3,6 +3,7 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -11,6 +12,10 @@ export default function DataViewer() {
   const [players, setPlayers] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -41,12 +46,15 @@ export default function DataViewer() {
     columns,
     state: {
       globalFilter,
+      pagination,
       sorting,
     },
     onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
 
@@ -72,7 +80,7 @@ export default function DataViewer() {
   }, []);
 
   return (
-    <section className="min-h-[100svh] bg-indigo-900 px-6 py-16 text-slate-50">
+    <section className="min-h-[100svh] bg-mauve-900 px-6 py-16 text-slate-50">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -151,6 +159,48 @@ export default function DataViewer() {
                 No players match your search.
               </p>
             )}
+
+            <div className="flex flex-col gap-3 border-t border-indigo-800 px-4 py-4 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
+              <p>
+                Page {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </p>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => table.firstPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  className="rounded-md border border-indigo-500 px-3 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  First
+                </button>
+                <button
+                  type="button"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                  className="rounded-md border border-indigo-500 px-3 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                  className="rounded-md border border-indigo-500 px-3 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+                <button
+                  type="button"
+                  onClick={() => table.lastPage()}
+                  disabled={!table.getCanNextPage()}
+                  className="rounded-md border border-indigo-500 px-3 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Last
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
